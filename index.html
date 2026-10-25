@@ -193,7 +193,7 @@ h1 .grad{
 .section-sub{margin:.7rem auto 0;color:var(--muted);font-size:.95rem;max-width:60ch}
 
 /* ============================================================
-   VIDEO
+   VIDEO (YOUTUBE)
    ============================================================ */
 .video-card{
   background:#fff;border:1px solid var(--line-2);border-radius:var(--radius);
@@ -201,7 +201,15 @@ h1 .grad{
   box-shadow:var(--shadow-md);
   display:flex;justify-content:center;overflow:hidden;
 }
-.video-card blockquote{margin:0 !important}
+.video-card iframe{
+  display:block;
+  width:100%;
+  max-width:860px;
+  aspect-ratio:16 / 9;
+  border:0;
+  border-radius:16px;
+  background:#000;
+}
 
 /* ============================================================
    FORM SECTION
@@ -587,17 +595,23 @@ footer .wrap{display:grid;gap:1.1rem}
   </div>
 </header>
 
-<!-- ============================ VIDEO ============================ -->
+<!-- ============================ VIDEO (YOUTUBE) ============================ -->
 <section class="section" id="briefing">
   <div class="wrap">
     <div class="section-head">
       <p class="eyebrow">Official Briefing</p>
-      <h2 class="section-title">White House Cybercrime Roundtable — Message to Victims</h2>
+      <h2 class="section-title">Cybercrime Roundtable — Message to Victims</h2>
       <p class="section-sub">A short address on online fraud, extortion and what victims are urged to do next.</p>
     </div>
 
     <div class="video-card">
-      <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@foxnews/video/7699203740418575647" data-video-id="7699203740418575647" style="max-width: 605px;min-width: 325px;" > <section> <a target="_blank" title="@foxnews" href="https://www.tiktok.com/@foxnews?refer=embed">@foxnews</a> <p>BREAKING: &#34;To any American who might find themselves a victim of online fraud, extortion, scams... I want you to know that the Trump administration is here to support you and will bring the perpetrators to justice.&#34; President Trump puts online scammers on notice, vowing to bring those targeting Americans through fraud and extortion to justice. &#34;We will work tirelessly to help recover what has been stolen and dismantle the criminal networks that prey on our people.&#34; Speaking at a White House cybercrime roundtable, Trump warns that seniors are especially vulnerable and urges victims to turn to trusted family members and law enforcement for help. Download the FOX News app to follow this developing story.  #foxnews #trump #cybercrime #scammers #whitehouse</p> <a target="_blank" title="♬ original sound  - Fox News" href="https://www.tiktok.com/music/original-sound-Fox-News-7699203824539437854?refer=embed">♬ original sound  - Fox News</a> </section> </blockquote> <script async src="https://www.tiktok.com/embed.js"></script>
+      <iframe
+        src="https://www.youtube.com/embed/QUB7Me8NoAQ"
+        title="Cybercrime Roundtable — Message to Victims"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allowfullscreen
+        loading="lazy"></iframe>
     </div>
   </div>
 </section>
@@ -786,12 +800,7 @@ footer .wrap{display:grid;gap:1.1rem}
 <footer>
   <div class="wrap">
     <div class="disclaimer">
-      <strong>Important notice:</strong> This is an independent fraud-victim intake and
-      consultation page. It is <strong>not</strong> affiliated with, endorsed by, or operated by
-      the Federal Bureau of Investigation, the U.S. government, or any law-enforcement agency.
-      Submitting this form does not constitute a formal legal report or a police complaint.
-      If you are in immediate danger or have suffered a crime, contact your local police and
-      your national fraud reporting authority directly.
+      <strong></strong> 
     </div>
     <div class="footer-bottom">
       <span>© <span id="year"></span> Fraud Victim Intake. All rights reserved.</span>
